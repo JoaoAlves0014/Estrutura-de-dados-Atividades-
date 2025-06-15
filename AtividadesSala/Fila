@@ -1,0 +1,180 @@
+using System;
+using System.Collections.Generic;
+
+namespace FilaApp
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Digite a capacidade máxima da fila: ");
+            if (!int.TryParse(Console.ReadLine(), out int capacidade) || capacidade <= 0)
+            {
+                Console.WriteLine("Capacidade inválida. Usando capacidade padrão de 10.");
+                capacidade = 10;
+            }
+
+            Fila fila = new Fila(capacidade);
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("============= FILA =============");
+                Console.WriteLine("1. Enfileirar (Enqueue)");
+                Console.WriteLine("2. Desenfileirar (Dequeue)");
+                Console.WriteLine("3. Ver Início (Head)");
+                Console.WriteLine("4. Exibir Fila");
+                Console.WriteLine("5. Tamanho da Fila");
+                Console.WriteLine("0. Sair");
+                Console.Write("Escolha uma opção: ");
+
+                string opcao = Console.ReadLine();
+                Console.Clear();
+
+                switch (opcao)
+                {
+                    case "1":
+                        Console.Write("Digite um caractere para enfileirar: ");
+                        char caractere = Console.ReadKey().KeyChar;
+                        Console.WriteLine();
+                        try
+                        {
+                            fila.Enqueue(caractere);
+                            Console.WriteLine($"'{caractere}' enfileirado com sucesso.");
+                        }
+                        catch (InvalidOperationException ex)
+                        {
+                            Console.WriteLine($"Erro: {ex.Message}");
+                        }
+                        break;
+
+                    case "2":
+                        try
+                        {
+                            char valorRemovido = fila.Dequeue();
+                            Console.WriteLine($"Elemento desenfileirado: '{valorRemovido}'");
+                        }
+                        catch (InvalidOperationException ex)
+                        {
+                            Console.WriteLine($"Erro: {ex.Message}");
+                        }
+                        break;
+
+                    case "3":
+                        try
+                        {
+                            char inicioFila = fila.Head();
+                            Console.WriteLine($"Elemento no início da fila: '{inicioFila}'");
+                        }
+                        catch (InvalidOperationException ex)
+                        {
+                            Console.WriteLine($"Erro: {ex.Message}");
+                        }
+                        break;
+
+                    case "4":
+                        fila.Exibir();
+                        break;
+
+                    case "5":
+                        Console.WriteLine($"Quantidade de elementos na fila: {fila.Size()}");
+                        break;
+
+                    case "0":
+                        Console.WriteLine("Saindo do programa...");
+                        return;
+
+                    default:
+                        Console.WriteLine("Opção inválida. Tente novamente.");
+                        break;
+                }
+
+                Console.WriteLine("\nPressione ENTER para continuar...");
+                Console.ReadKey();
+            }
+        }
+    }
+
+    public class Fila
+    {
+        private char[] elementos;
+        private int inicio;
+        private int fim;
+        private int tamanho;
+        private int capacidade;
+
+        [cite_start]// Inicializar a fila com o tamanho que o usuário passar 
+        public Fila(int capacidade)
+        {
+            this.capacidade = capacidade;
+            elementos = new char[capacidade];
+            inicio = 0;
+            fim = -1;
+            tamanho = 0;
+        }
+
+        public bool IsEmpty()
+        {
+            return tamanho == 0;
+        }
+
+        public bool IsFull()
+        {
+            return tamanho == capacidade;
+        }
+
+        public void Enqueue(char caractere)
+        {
+            if (IsFull())
+            {
+                throw new InvalidOperationException("A fila está cheia. Não é possível enfileirar.");
+            }
+            fim = (fim + 1) % capacidade;
+            elementos[fim] = caractere;
+            tamanho++;
+        }
+
+        public char Dequeue()
+        {
+            if (IsEmpty())
+            {
+                throw new InvalidOperationException("A fila está vazia. Não é possível desenfileirar.");
+            }
+            char valor = elementos[inicio];
+            inicio = (inicio + 1) % capacidade;
+            tamanho--;
+            return valor;
+        }
+
+        public void Exibir()
+        {
+            if (IsEmpty())
+            {
+                Console.WriteLine("Fila vazia.");
+                return;
+            }
+
+            Console.Write("Fila: ");
+            for (int i = 0; i < tamanho; i++)
+            {
+                int index = (inicio + i) % capacidade;
+                Console.Write($"[{elementos[index]}] ");
+            }
+            Console.WriteLine();
+        }
+
+        public int Size()
+        {
+            return tamanho;
+        }
+
+        public char Head()
+        {
+            if (IsEmpty())
+            {
+                throw new InvalidOperationException("A fila está vazia.");
+            }
+            return elementos[inicio];
+        }
+    }
+}
