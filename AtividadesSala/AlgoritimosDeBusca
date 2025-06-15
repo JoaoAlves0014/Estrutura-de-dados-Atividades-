@@ -1,0 +1,141 @@
+using System;
+using System.Collections.Generic;
+
+namespace BuscaApp
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            ListaBusca lista = new ListaBusca();
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("============= ALGORITMOS DE BUSCA =============");
+                Console.WriteLine("1. Inserir valor na lista");
+                Console.WriteLine("2. Exibir lista");
+                Console.WriteLine("3. Buscar valor (Busca Linear)");
+                Console.WriteLine("4. Buscar valor (Busca Binária)");
+                Console.WriteLine("0. Sair");
+                Console.Write("Escolha uma opção: ");
+
+                string opcao = Console.ReadLine();
+                Console.Clear();
+
+                switch (opcao)
+                {
+                    case "1":
+                        Console.Write("Valor a inserir: ");
+                        if (int.TryParse(Console.ReadLine(), out int valor))
+                            lista.Inserir(valor);
+                        else
+                            Console.WriteLine("Valor inválido.");
+                        break;
+
+                    case "2":
+                        lista.Exibir();
+                        break;
+
+                    case "3":
+                        Console.Write("Valor para busca linear: ");
+                        if (int.TryParse(Console.ReadLine(), out int buscarLinear))
+                        {
+                            int pos = lista.BuscaLinear(buscarLinear);
+                            if (pos != -1)
+                                Console.WriteLine($"{buscarLinear} encontrado na posição {pos}.");
+                            else
+                                Console.WriteLine("Valor não encontrado.");
+                        }
+                        else
+                            Console.WriteLine("Valor inválido.");
+                        break;
+
+                    case "4":
+                        Console.Write("Valor para busca binária: ");
+                        if (int.TryParse(Console.ReadLine(), out int buscarBinaria))
+                        {
+                            int pos = lista.BuscaBinaria(buscarBinaria);
+                            if (pos != -1)
+                                Console.WriteLine($"{buscarBinaria} encontrado na posição {pos} da lista ordenada.");
+                            else
+                                Console.WriteLine("Valor não encontrado.");
+                        }
+                        else
+                            Console.WriteLine("Valor inválido.");
+                        break;
+
+                    case "0":
+                        return;
+
+                    default:
+                        Console.WriteLine("Opção inválida.");
+                        break;
+                }
+
+                Console.WriteLine("\nPressione ENTER para continuar...");
+                Console.ReadKey();
+            }
+        }
+    }
+
+    public class ListaBusca
+    {
+        private List<int> elementos;
+
+        public ListaBusca()
+        {
+            elementos = new List<int>();
+        }
+
+        public void Inserir(int valor)
+        {
+            elementos.Add(valor);
+            Console.WriteLine($"{valor} inserido.");
+        }
+
+        public void Exibir()
+        {
+            if (elementos.Count == 0)
+            {
+                Console.WriteLine("Lista vazia.");
+                return;
+            }
+
+            Console.WriteLine("Elementos da lista:");
+            for (int i = 0; i < elementos.Count; i++)
+                Console.Write($"[{elementos[i]}] ");
+            Console.WriteLine();
+        }
+
+        public int BuscaLinear(int valor)
+        {
+            for (int i = 0; i < elementos.Count; i++)
+            {
+                if (elementos[i] == valor)
+                    return i;
+            }
+            return -1;
+        }
+
+        public int BuscaBinaria(int valor)
+        {
+            elementos.Sort(); // garante que a lista esteja ordenada
+            int inicio = 0;
+            int fim = elementos.Count - 1;
+
+            while (inicio <= fim)
+            {
+                int meio = (inicio + fim) / 2;
+                if (elementos[meio] == valor)
+                    return meio;
+                else if (valor < elementos[meio])
+                    fim = meio - 1;
+                else
+                    inicio = meio + 1;
+            }
+
+            return -1;
+        }
+    }
+}
