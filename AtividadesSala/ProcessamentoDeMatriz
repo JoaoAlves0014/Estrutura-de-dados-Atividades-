@@ -1,0 +1,180 @@
+using System;
+using System.Linq;
+
+namespace MatrizProcessamentoApp
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            MatrizProcessamento matrizProc = null;
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("============= PROCESSAMENTO DE MATRIZ =============");
+                Console.WriteLine("1. Criar e Preencher Matriz (M x N)");
+                Console.WriteLine("2. Exibir Matriz");
+                Console.WriteLine("3. Obter Último Elemento de uma Linha Específica");
+                Console.WriteLine("0. Sair");
+                Console.Write("Escolha uma opção: ");
+
+                string opcao = Console.ReadLine();
+                Console.Clear();
+
+                switch (opcao)
+                {
+                    case "1":
+                        Console.Write("Digite o número de linhas (M): ");
+                        if (!int.TryParse(Console.ReadLine(), out int m) || m <= 0)
+                        {
+                            Console.WriteLine("Número de linhas inválido.");
+                            break;
+                        }
+                        Console.Write("Digite o número de colunas (N): ");
+                        if (!int.TryParse(Console.ReadLine(), out int n) || n <= 0)
+                        {
+                            Console.WriteLine("Número de colunas inválido.");
+                            break;
+                        }
+                        matrizProc = new MatrizProcessamento(m, n);
+                        Console.WriteLine("Digite os elementos da matriz, linha por linha, separados por espaço:");
+                        matrizProc.PreencherMatrizManualmente();
+                        Console.WriteLine("Matriz criada e preenchida com sucesso!");
+                        break;
+
+                    case "2":
+                        if (matrizProc != null)
+                        {
+                            matrizProc.ExibirMatriz();
+                        }
+                        else
+                        {
+                            Console.WriteLine("A matriz ainda não foi criada. Escolha a opção 1 primeiro.");
+                        }
+                        break;
+
+                    case "3":
+                        if (matrizProc != null)
+                        {
+                            Console.Write("Digite o número da linha para obter o último elemento (1-baseado): ");
+                            if (int.TryParse(Console.ReadLine(), out int linhaNumero) && linhaNumero > 0 && linhaNumero <= matrizProc.GetRows())
+                            {
+                                try
+                                {
+                                    int ultimoElemento = matrizProc.GetUltimoElementoDaLinha(linhaNumero - 1);
+                                    Console.WriteLine($"O último elemento da linha {linhaNumero} é: {ultimoElemento}");
+                                }
+                                catch (IndexOutOfRangeException ex)
+                                {
+                                    Console.WriteLine($"Erro: {ex.Message}");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Número da linha inválido ou fora dos limites da matriz.");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("A matriz ainda não foi criada. Escolha a opção 1 primeiro.");
+                        }
+                        break;
+
+                    case "0":
+                        Console.WriteLine("Saindo do programa...");
+                        return;
+
+                    default:
+                        Console.WriteLine("Opção inválida. Tente novamente.");
+                        break;
+                }
+
+                Console.WriteLine("\nPressione ENTER para continuar...");
+                Console.ReadKey();
+            }
+        }
+    }
+
+    public class MatrizProcessamento
+    {
+        private int[,] mat;
+        private int m;
+        private int n;
+
+        public MatrizProcessamento(int linhas, int colunas)
+        {
+            m = linhas;
+            n = colunas;
+            mat = new int[m, n];
+        }
+
+        public int GetRows()
+        {
+            return m;
+        }
+
+        public int GetColumns()
+        {
+            return n;
+        }
+
+        public void PreencherMatrizManualmente()
+        {
+            for (int i = 0; i < m; i++)
+            {
+                Console.Write($"Linha {i + 1} (separar por espaço): ");
+                string[] valoresString = Console.ReadLine().Split(' ');
+
+                if (valoresString.Length != n)
+                {
+                    Console.WriteLine($"Número incorreto de elementos para a linha {i + 1}. Por favor, digite {n} valores.");
+                    i--;
+                    continue;
+                }
+
+                for (int j = 0; j < n; j++)
+                {
+                    if (int.TryParse(valoresString[j], out int valor))
+                    {
+                        mat[i, j] = valor;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Valor inválido '{valoresString[j]}' na linha {i + 1}. Digite apenas números inteiros.");
+                        i--;
+                        break;
+                    }
+                }
+            }
+        }
+
+        public void ExibirMatriz()
+        {
+            if (mat == null)
+            {
+                Console.WriteLine("A matriz não foi criada.");
+                return;
+            }
+
+            Console.WriteLine("Matriz:");
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    Console.Write($"[{mat[i, j].ToString().PadLeft(3)}]");
+                }
+                Console.WriteLine();
+            }
+        }
+
+        public int GetUltimoElementoDaLinha(int indiceLinha)
+        {
+            if (indiceLinha < 0 || indiceLinha >= m)
+            {
+                throw new IndexOutOfRangeException("O índice da linha está fora dos limites da matriz.");
+            }
+            return mat[indiceLinha, n - 1];
+        }
+    }
+}
