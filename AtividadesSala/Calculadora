@@ -1,0 +1,173 @@
+using System;
+using System.Collections.Generic;
+
+namespace CalculadoraApp
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Calculadora calculadora = new Calculadora();
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("============= CALCULADORA =============");
+                Console.WriteLine("1. Somar");
+                Console.WriteLine("2. Subtrair");
+                Console.WriteLine("3. Multiplicar");
+                Console.WriteLine("4. Dividir");
+                Console.WriteLine("5. Raiz Quadrada");
+                Console.WriteLine("6. Potência");
+                Console.WriteLine("0. Sair");
+                Console.Write("Escolha uma opção: ");
+
+                string opcao = Console.ReadLine();
+                Console.Clear();
+
+                double num1, num2;
+                bool sucesso1, sucesso2;
+
+                switch (opcao)
+                {
+                    case "1":
+                        Console.Write("Digite o primeiro número: ");
+                        sucesso1 = double.TryParse(Console.ReadLine(), out num1);
+                        Console.Write("Digite o segundo número: ");
+                        sucesso2 = double.TryParse(Console.ReadLine(), out num2);
+                        if (sucesso1 && sucesso2)
+                            Console.WriteLine($"Resultado da Soma: {calculadora.Somar(num1, num2)}");
+                        else
+                            Console.WriteLine("Entrada inválida. Digite apenas números.");
+                        break;
+
+                    case "2":
+                        Console.Write("Digite o primeiro número: ");
+                        sucesso1 = double.TryParse(Console.ReadLine(), out num1);
+                        Console.Write("Digite o segundo número: ");
+                        sucesso2 = double.TryParse(Console.ReadLine(), out num2);
+                        if (sucesso1 && sucesso2)
+                            Console.WriteLine($"Resultado da Subtração: {calculadora.Subtrair(num1, num2)}");
+                        else
+                            Console.WriteLine("Entrada inválida. Digite apenas números.");
+                        break;
+
+                    case "3":
+                        Console.Write("Digite o primeiro número: ");
+                        sucesso1 = double.TryParse(Console.ReadLine(), out num1);
+                        Console.Write("Digite o segundo número: ");
+                        sucesso2 = double.TryParse(Console.ReadLine(), out num2);
+                        if (sucesso1 && sucesso2)
+                            Console.WriteLine($"Resultado da Multiplicação: {calculadora.Multiplicar(num1, num2)}");
+                        else
+                            Console.WriteLine("Entrada inválida. Digite apenas números.");
+                        break;
+
+                    case "4":
+                        Console.Write("Digite o primeiro número: ");
+                        sucesso1 = double.TryParse(Console.ReadLine(), out num1);
+                        Console.Write("Digite o segundo número: ");
+                        sucesso2 = double.TryParse(Console.ReadLine(), out num2);
+                        if (sucesso1 && sucesso2)
+                        {
+                            try
+                            {
+                                Console.WriteLine($"Resultado da Divisão: {calculadora.Dividir(num1, num2)}");
+                            }
+                            catch (DivideByZeroException ex)
+                            {
+                                Console.WriteLine($"Erro: {ex.Message}");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Entrada inválida. Digite apenas números.");
+                        }
+                        break;
+
+                    case "5":
+                        Console.Write("Digite o número: ");
+                        sucesso1 = double.TryParse(Console.ReadLine(), out num1);
+                        if (sucesso1)
+                        {
+                            try
+                            {
+                                Console.WriteLine($"Resultado da Raiz Quadrada: {calculadora.RaizQuadrada(num1)}");
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                Console.WriteLine($"Erro: {ex.Message}");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Entrada inválida. Digite apenas números.");
+                        }
+                        break;
+
+                    case "6":
+                        Console.Write("Digite a base: ");
+                        sucesso1 = double.TryParse(Console.ReadLine(), out num1);
+                        Console.Write("Digite o expoente: ");
+                        sucesso2 = double.TryParse(Console.ReadLine(), out num2);
+                        if (sucesso1 && sucesso2)
+                            Console.WriteLine($"Resultado da Potência: {calculadora.Potencia(num1, num2)}");
+                        else
+                            Console.WriteLine("Entrada inválida. Digite apenas números.");
+                        break;
+
+                    case "0":
+                        return;
+
+                    default:
+                        Console.WriteLine("Opção inválida.");
+                        break;
+                }
+
+                Console.WriteLine("\nPressione ENTER para continuar...");
+                Console.ReadKey();
+            }
+        }
+    }
+
+    public class Calculadora
+    {
+        public double Somar(double a, double b)
+        {
+            return a + b;
+        }
+
+        public double Subtrair(double a, double b)
+        {
+            return a - b;
+        }
+
+        public double Multiplicar(double a, double b)
+        {
+            return a * b;
+        }
+
+        public double Dividir(double a, double b)
+        {
+            if (b == 0)
+            {
+                throw new DivideByZeroException("Não é possível dividir por zero.");
+            }
+            return a / b;
+        }
+
+        public double RaizQuadrada(double a)
+        {
+            if (a < 0)
+            {
+                throw new ArgumentException("Não é possível calcular a raiz quadrada de um número negativo.");
+            }
+            return Math.Sqrt(a);
+        }
+
+        public double Potencia(double a, double b)
+        {
+            return Math.Pow(a, b);
+        }
+    }
+}
