@@ -1,4 +1,5 @@
 Estruturas de Dados e Algoritmos em C#
+
 Este repositório contém uma coleção de implementações de estruturas de dados e algoritmos fundamentais, desenvolvidos em C# como aplicações de console. Cada projeto visa demonstrar o funcionamento e as operações básicas de cada estrutura ou algoritmo de forma interativa.
 
 Conteúdo do Repositório
@@ -19,6 +20,7 @@ Operações com Matriz: Projeto para a criação, exibição e identificação d
 Processamento de Matriz: Projeto para a criação, exibição e obtenção do último elemento de uma linha específica em matrizes M x N.
 
 Como Executar
+
 Para executar qualquer um dos projetos:
 
 Clone este repositório para sua máquina local.
