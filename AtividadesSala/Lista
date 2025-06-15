@@ -1,0 +1,149 @@
+using System;
+using System.Collections.Generic;
+
+namespace ListaApp
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Lista<int> lista = new Lista<int>();
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("============= LISTA =============");
+                Console.WriteLine("1. Inserir valor no final");
+                Console.WriteLine("2. Inserir valor em posição específica");
+                Console.WriteLine("3. Remover valor");
+                Console.WriteLine("4. Buscar valor");
+                Console.WriteLine("5. Exibir lista");
+                Console.WriteLine("0. Sair");
+                Console.Write("Escolha uma opção: ");
+
+                string opcao = Console.ReadLine();
+                Console.Clear();
+
+                switch (opcao)
+                {
+                    case "1":
+                        Console.Write("Valor a inserir: ");
+                        if (int.TryParse(Console.ReadLine(), out int valorFim))
+                            lista.Inserir(valorFim);
+                        else
+                            Console.WriteLine("Valor inválido.");
+                        break;
+
+                    case "2":
+                        Console.Write("Valor a inserir: ");
+                        if (int.TryParse(Console.ReadLine(), out int valor))
+                        {
+                            Console.Write("Posição: ");
+                            if (int.TryParse(Console.ReadLine(), out int posicao))
+                                lista.InserirNaPosicao(valor, posicao);
+                            else
+                                Console.WriteLine("Posição inválida.");
+                        }
+                        else
+                            Console.WriteLine("Valor inválido.");
+                        break;
+
+                    case "3":
+                        Console.Write("Valor a remover: ");
+                        if (int.TryParse(Console.ReadLine(), out int valorRemover))
+                        {
+                            if (lista.Remover(valorRemover))
+                                Console.WriteLine($"{valorRemover} removido.");
+                            else
+                                Console.WriteLine("Valor não encontrado.");
+                        }
+                        else
+                            Console.WriteLine("Valor inválido.");
+                        break;
+
+                    case "4":
+                        Console.Write("Valor a buscar: ");
+                        if (int.TryParse(Console.ReadLine(), out int valorBuscar))
+                        {
+                            int pos = lista.Buscar(valorBuscar);
+                            if (pos != -1)
+                                Console.WriteLine($"{valorBuscar} encontrado na posição {pos}.");
+                            else
+                                Console.WriteLine("Valor não encontrado.");
+                        }
+                        else
+                            Console.WriteLine("Valor inválido.");
+                        break;
+
+                    case "5":
+                        lista.Exibir();
+                        break;
+
+                    case "0":
+                        return;
+
+                    default:
+                        Console.WriteLine("Opção inválida.");
+                        break;
+                }
+
+                Console.WriteLine("\nPressione ENTER para continuar...");
+                Console.ReadKey();
+            }
+        }
+    }
+
+    public class Lista<T>
+    {
+        private List<T> elementos;
+
+        public Lista()
+        {
+            elementos = new List<T>();
+        }
+
+        public void Inserir(T valor)
+        {
+            elementos.Add(valor);
+            Console.WriteLine($"{valor} inserido no final da lista.");
+        }
+
+        public void InserirNaPosicao(T valor, int posicao)
+        {
+            if (posicao >= 0 && posicao <= elementos.Count)
+            {
+                elementos.Insert(posicao, valor);
+                Console.WriteLine($"{valor} inserido na posição {posicao}.");
+            }
+            else
+            {
+                Console.WriteLine("Posição inválida.");
+            }
+        }
+
+        public bool Remover(T valor)
+        {
+            return elementos.Remove(valor);
+        }
+
+        public int Buscar(T valor)
+        {
+            return elementos.IndexOf(valor);
+        }
+
+        public void Exibir()
+        {
+            if (elementos.Count == 0)
+            {
+                Console.WriteLine("Lista vazia.");
+                return;
+            }
+
+            Console.WriteLine("Elementos da lista:");
+            for (int i = 0; i < elementos.Count; i++)
+            {
+                Console.WriteLine($"[{i}] {elementos[i]}");
+            }
+        }
+    }
+}
