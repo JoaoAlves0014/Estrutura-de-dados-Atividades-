@@ -1,1 +1,117 @@
+using System;
+using System.Collections.Generic;
+
+namespace PilhaApp
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Pilha<int> pilha = new Pilha<int>();
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("============= PILHA =============");
+                Console.WriteLine("1. Inserir valor (Push)");
+                Console.WriteLine("2. Remover valor do topo (Pop)");
+                Console.WriteLine("3. Ver valor do topo (Peek)");
+                Console.WriteLine("4. Exibir pilha");
+                Console.WriteLine("0. Sair");
+                Console.Write("Escolha uma opção: ");
+
+                string opcao = Console.ReadLine();
+                Console.Clear();
+
+                switch (opcao)
+                {
+                    case "1":
+                        Console.Write("Valor a inserir: ");
+                        if (int.TryParse(Console.ReadLine(), out int valorInserir))
+                            pilha.Push(valorInserir);
+                        else
+                            Console.WriteLine("Valor inválido.");
+                        break;
+                    case "2":
+                        if (pilha.Pop(out int removido))
+                            Console.WriteLine($"{removido} removido do topo.");
+                        else
+                            Console.WriteLine("Pilha vazia.");
+                        break;
+                    case "3":
+                        if (pilha.Peek(out int topo))
+                            Console.WriteLine($"Topo da pilha: {topo}");
+                        else
+                            Console.WriteLine("Pilha vazia.");
+                        break;
+                    case "4":
+                        Console.WriteLine("Conteúdo da pilha:");
+                        pilha.Exibir();
+                        break;
+                    case "0":
+                        return;
+                    default:
+                        Console.WriteLine("Opção inválida.");
+                        break;
+                }
+
+                Console.WriteLine("\nPressione ENTER para continuar...");
+                Console.ReadKey();
+            }
+        }
+    }
+
+    public class Pilha<T>
+    {
+        private Stack<T> elementos;
+
+        public Pilha()
+        {
+            elementos = new Stack<T>();
+        }
+
+        public void Push(T valor)
+        {
+            elementos.Push(valor);
+            Console.WriteLine($"{valor} inserido na pilha.");
+        }
+
+        public bool Pop(out T valor)
+        {
+            if (elementos.Count > 0)
+            {
+                valor = elementos.Pop();
+                return true;
+            }
+
+            valor = default(T);
+            return false;
+        }
+
+        public bool Peek(out T valor)
+        {
+            if (elementos.Count > 0)
+            {
+                valor = elementos.Peek();
+                return true;
+            }
+
+            valor = default(T);
+            return false;
+        }
+
+        public void Exibir()
+        {
+            if (elementos.Count == 0)
+            {
+                Console.WriteLine("Pilha vazia.");
+                return;
+            }
+
+            foreach (T item in elementos)
+                Console.WriteLine($"| {item} |");
+            Console.WriteLine(" ----- ");
+        }
+    }
+}
 
