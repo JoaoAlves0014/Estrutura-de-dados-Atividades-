@@ -3,6 +3,7 @@ Estruturas de Dados e Algoritmos em C#
 Este repositório contém uma coleção de implementações de estruturas de dados e algoritmos fundamentais, desenvolvidos em C# como aplicações de console. Cada projeto visa demonstrar o funcionamento e as operações básicas de cada estrutura ou algoritmo de forma interativa.
 
 Conteúdo do Repositório
+
 Algoritmos de Ordenação: Implementações de algoritmos como Bubble Sort, Selection Sort e Insertion Sort para ordenar listas de inteiros.
 
 Algoritmos de Busca: Demonstrações de Busca Linear e Busca Binária para encontrar elementos em listas.
