@@ -1,0 +1,160 @@
+using System;
+
+namespace MatrizApp
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            MatrizOperacoes matrizOps = null; // Inicializa como nulo, será criada ao escolher a opção 1
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("============= OPERAÇÕES COM MATRIZ =============");
+                Console.WriteLine("1. Criar e Preencher Matriz");
+                Console.WriteLine("2. Exibir Matriz");
+                Console.WriteLine("3. Encontrar Maior Valor por Linha");
+                Console.WriteLine("0. Sair");
+                Console.Write("Escolha uma opção: ");
+
+                string opcao = Console.ReadLine();
+                Console.Clear();
+
+                switch (opcao)
+                {
+                    case "1":
+                        Console.Write("Digite o tamanho N da matriz (N x N): ");
+                        if (int.TryParse(Console.ReadLine(), out int n) && n > 0)
+                        {
+                            matrizOps = new MatrizOperacoes(n);
+                            Console.WriteLine("Digite os elementos da matriz, linha por linha, separados por espaço:");
+                            matrizOps.PreencherMatrizManualmente();
+                            Console.WriteLine("Matriz criada e preenchida com sucesso!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Tamanho da matriz inválido. Digite um número inteiro positivo.");
+                        }
+                        break;
+
+                    case "2":
+                        if (matrizOps != null)
+                        {
+                            matrizOps.ExibirMatriz();
+                        }
+                        else
+                        {
+                            Console.WriteLine("A matriz ainda não foi criada. Escolha a opção 1 primeiro.");
+                        }
+                        break;
+
+                    case "3":
+                        if (matrizOps != null)
+                        {
+                            matrizOps.EncontrarMaiorPorLinha();
+                        }
+                        else
+                        {
+                            Console.WriteLine("A matriz ainda não foi criada. Escolha a opção 1 primeiro.");
+                        }
+                        break;
+
+                    case "0":
+                        Console.WriteLine("Saindo do programa...");
+                        return;
+
+                    default:
+                        Console.WriteLine("Opção inválida. Tente novamente.");
+                        break;
+                }
+
+                Console.WriteLine("\nPressione ENTER para continuar...");
+                Console.ReadKey();
+            }
+        }
+    }
+
+    public class MatrizOperacoes
+    {
+        private int[,] mat;
+        private int n;
+
+        public MatrizOperacoes(int tamanho)
+        {
+            n = tamanho;
+            mat = new int[n, n];
+        }
+
+        public void PreencherMatrizManualmente()
+        {
+            for (int i = 0; i < n; i++)
+            {
+                Console.Write($"Linha {i + 1} (separar por espaço): ");
+                string[] valoresString = Console.ReadLine().Split(' ');
+                if (valoresString.Length != n)
+                {
+                    Console.WriteLine($"Número incorreto de elementos para a linha {i + 1}. Por favor, digite {n} valores.");
+                    i--; // Repete a linha atual
+                    continue;
+                }
+
+                for (int j = 0; j < n; j++)
+                {
+                    if (int.TryParse(valoresString[j], out int valor))
+                    {
+                        mat[i, j] = valor;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Valor inválido '{valoresString[j]}' na linha {i + 1}. Digite apenas números inteiros.");
+                        i--; // Repete a linha atual
+                        break; // Sai do loop interno e força o loop externo a repetir
+                    }
+                }
+            }
+        }
+
+        public void ExibirMatriz()
+        {
+            if (mat == null)
+            {
+                Console.WriteLine("A matriz não foi criada.");
+                return;
+            }
+
+            Console.WriteLine("Matriz:");
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    Console.Write($"[{mat[i, j].ToString().PadLeft(3)}]"); // PadLeft para formatação
+                }
+                Console.WriteLine();
+            }
+        }
+
+        public void EncontrarMaiorPorLinha()
+        {
+            if (mat == null)
+            {
+                Console.WriteLine("A matriz não foi criada.");
+                return;
+            }
+
+            Console.WriteLine("Maiores valores por linha:");
+            for (int i = 0; i < n; i++)
+            {
+                int maior = mat[i, 0];
+                for (int j = 0; j < n; j++)
+                {
+                    if (mat[i, j] > maior)
+                    {
+                        maior = mat[i, j];
+                    }
+                }
+                Console.WriteLine($"Linha {i + 1}: {maior}");
+            }
+        }
+    }
+}
