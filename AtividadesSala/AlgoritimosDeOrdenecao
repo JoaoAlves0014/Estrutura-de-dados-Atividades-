@@ -1,0 +1,166 @@
+using System;
+using System.Collections.Generic;
+
+namespace OrdenacaoApp
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            ListaOrdenacao lista = new ListaOrdenacao();
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("============= ORDENAÇÃO =============");
+                Console.WriteLine("1. Inserir valor");
+                Console.WriteLine("2. Exibir lista original");
+                Console.WriteLine("3. Ordenar com Bubble Sort");
+                Console.WriteLine("4. Ordenar com Selection Sort");
+                Console.WriteLine("5. Ordenar com Insertion Sort");
+                Console.WriteLine("0. Sair");
+                Console.Write("Escolha uma opção: ");
+
+                string opcao = Console.ReadLine();
+                Console.Clear();
+
+                switch (opcao)
+                {
+                    case "1":
+                        Console.Write("Valor a inserir: ");
+                        if (int.TryParse(Console.ReadLine(), out int valor))
+                            lista.Inserir(valor);
+                        else
+                            Console.WriteLine("Valor inválido.");
+                        break;
+
+                    case "2":
+                        lista.ExibirOriginal();
+                        break;
+
+                    case "3":
+                        lista.OrdenarBubbleSort();
+                        break;
+
+                    case "4":
+                        lista.OrdenarSelectionSort();
+                        break;
+
+                    case "5":
+                        lista.OrdenarInsertionSort();
+                        break;
+
+                    case "0":
+                        return;
+
+                    default:
+                        Console.WriteLine("Opção inválida.");
+                        break;
+                }
+
+                Console.WriteLine("\nPressione ENTER para continuar...");
+                Console.ReadKey();
+            }
+        }
+    }
+
+    public class ListaOrdenacao
+    {
+        private List<int> elementos;
+
+        public ListaOrdenacao()
+        {
+            elementos = new List<int>();
+        }
+
+        public void Inserir(int valor)
+        {
+            elementos.Add(valor);
+            Console.WriteLine($"{valor} inserido.");
+        }
+
+        public void ExibirOriginal()
+        {
+            if (elementos.Count == 0)
+            {
+                Console.WriteLine("Lista vazia.");
+                return;
+            }
+
+            Console.WriteLine("Lista original:");
+            foreach (int val in elementos)
+                Console.Write($"[{val}] ");
+            Console.WriteLine();
+        }
+
+        public void OrdenarBubbleSort()
+        {
+            var lista = new List<int>(elementos);
+            int n = lista.Count;
+            for (int i = 0; i < n - 1; i++)
+            {
+                for (int j = 0; j < n - i - 1; j++)
+                {
+                    if (lista[j] > lista[j + 1])
+                    {
+                        int temp = lista[j];
+                        lista[j] = lista[j + 1];
+                        lista[j + 1] = temp;
+                    }
+                }
+            }
+
+            Console.WriteLine("Lista ordenada (Bubble Sort):");
+            foreach (int val in lista)
+                Console.Write($"[{val}] ");
+            Console.WriteLine();
+        }
+
+        public void OrdenarSelectionSort()
+        {
+            var lista = new List<int>(elementos);
+            int n = lista.Count;
+            for (int i = 0; i < n - 1; i++)
+            {
+                int min = i;
+                for (int j = i + 1; j < n; j++)
+                {
+                    if (lista[j] < lista[min])
+                        min = j;
+                }
+
+                int temp = lista[i];
+                lista[i] = lista[min];
+                lista[min] = temp;
+            }
+
+            Console.WriteLine("Lista ordenada (Selection Sort):");
+            foreach (int val in lista)
+                Console.Write($"[{val}] ");
+            Console.WriteLine();
+        }
+
+        public void OrdenarInsertionSort()
+        {
+            var lista = new List<int>(elementos);
+            int n = lista.Count;
+            for (int i = 1; i < n; i++)
+            {
+                int chave = lista[i];
+                int j = i - 1;
+
+                while (j >= 0 && lista[j] > chave)
+                {
+                    lista[j + 1] = lista[j];
+                    j--;
+                }
+                lista[j + 1] = chave;
+            }
+
+            Console.WriteLine("Lista ordenada (Insertion Sort):");
+            foreach (int val in lista)
+                Console.Write($"[{val}] ");
+            Console.WriteLine();
+        }
+    }
+}
